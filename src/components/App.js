@@ -6,13 +6,6 @@ import { connect } from 'react-redux';
 import { removeTask, editTask } from '../actions';
 import { bindActionCreators } from 'redux';
 
-const task = {
-      id: 1,
-      name: 'Adding Zip Code Field to Form',
-      type: 'general',
-      description: 'bar',
-      created_at: 'Created 4:59 PM on October 01 2017'
-    };
 class App extends Component {
   constructor(props) {
     super(props);
