@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import TaskForm from './TaskForm';
 import TaskList from './TaskList';
 import EditForm from './EditForm';
+import { connect } from 'react-redux';
+import { removeTask, editTask } from '../actions';
+import { bindActionCreators } from 'redux';
 
 const task = {
       id: 1,
@@ -18,38 +21,20 @@ class App extends Component {
       isEditing: false
     }
   }
-  onAddTask(value) {
-     this.setState({
-       tasks: this.state.tasks.concat(value)
-     })
-  }
   onUpdatTask(index, value){
-    let {tasks} = this.state;
-    tasks[index].name = value.name;
-    tasks[index].description = value.description;
-    tasks[index].type = value.type;
-    this.setState({tasks, isEditing: false})
+    this.props.editTask(value, index);
+    this.setState({isEditing: false})
   }  
-  onRemoveTask(index){
-    this.setState({
-         tasks: this.state.tasks,
-         isRemove: true,
-         taskpos: index,
-         isEditing: false
-    })
-    
-  }
   handleRemove(index) {
-    this.state.tasks.splice(index, 1);
+    this.props.removeTask(index);
     this.setState({
-         tasks: this.state.tasks,
          isRemove: false,
          isEditing: false
     })  
   }
   onEditTask(index) {
     this.setState({
-      taskupdate: this.state.tasks[index],
+      taskupdate: this.props.items.tasks[index],
       isEditing: true,
       taskIndex: index
     })
@@ -61,7 +46,7 @@ class App extends Component {
       )
     } else {
       return (
-        <TaskForm onAddTask={(value) => this.onAddTask(value)} tasks={this.state.tasks} parms={this.state.taskupdate} />
+        <TaskForm tasks={this.state.tasks} parms={this.state.taskupdate} />
       )
     }
   }
@@ -103,7 +88,7 @@ class App extends Component {
             </div>
             <div className="col-md-7 list">
             <h2>Your Current Tasks:</h2>
-            <TaskList tasks={this.state.tasks} onRemoveTask={(value) => this.onRemoveTask(value)} onEditTask={(value) => this.onEditTask(value)} />
+            <TaskList tasks={this.state.tasks} onEditTask={(value) => this.onEditTask(value)} />
           </div>
           </div>
         </div>
@@ -113,6 +98,14 @@ class App extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  console.log(state);
+    return {
+      items: state
+    }
+}
 
-
-export default App;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ removeTask, editTask }, dispatch);
+}
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -76,6 +76,7 @@ export default class EditForm extends Component {
         }
   }       
   render () { 
+    console.log('EditForm should update');
     return (
       <div>  
         <form>

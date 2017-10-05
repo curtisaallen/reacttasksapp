@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { addTask } from '../actions';
+import { bindActionCreators } from 'redux';
 
 class TaskForm extends Component {
   constructor(props) {
@@ -75,14 +78,13 @@ class TaskForm extends Component {
   }
   onSubmit(event) {
     event.preventDefault();
-    this.props.onAddTask({
+    this.props.addTask({
       id: this.props.tasks.length + 1,
       name: this.state.name,
       type: this.state.select ? this.state.select : 'general',
       description: this.state.description,
       created_at: this.currentDate()
     });
-
     this.setState({
         select: '',
         name: '',
@@ -125,7 +127,7 @@ class TaskForm extends Component {
   }
 }
 
-
-
-
-export default TaskForm;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ addTask }, dispatch);
+}
+export default connect(null, mapDispatchToProps)(TaskForm);
